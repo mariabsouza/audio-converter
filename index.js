@@ -26,7 +26,7 @@ app.use(bodyParser.raw({
 app.post('/convert-audio', async (req, res) => {
   try {
     const filename = uuidv4();
-    const buffer = req.body; // O buffer de áudio deve vir no corpo da requisição
+    const buffer = Buffer.from(req.body); // O buffer de áudio deve vir no corpo da requisição
 
     // Escrever o arquivo de áudio original
     await fs.promises.writeFile(`${filename}.ogg`, buffer);
@@ -46,7 +46,7 @@ app.post('/convert-audio', async (req, res) => {
           await fs.promises.unlink(inputFile);
           await fs.promises.unlink(outputFile);
           // Enviar dados como base64
-          return res.status(200).json({ base64: data });
+          return res.status(200).send(data);
         } catch (err) {
           console.error('Erro ao ler o arquivo:', err);
           return res.status(500).send('Erro ao ler o arquivo de saída');
