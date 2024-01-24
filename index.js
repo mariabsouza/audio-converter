@@ -18,15 +18,17 @@ app.use(
   }))
 app.use(express.json())
 
-app.use(bodyParser.raw({ 
-  type: 'audio/ogg', 
-  limit: '50mb' 
-}));
+// app.use(bodyParser.raw({ 
+//   type: 'audio/ogg', 
+//   limit: '50mb' 
+// }));
+
+app.use('/convert-audio', express.raw({ type: 'application/octet-stream' }));
 
 app.post('/convert-audio', async (req, res) => {
   try {
     const filename = uuidv4();
-    const buffer = Buffer.from(req.body); // O buffer de áudio deve vir no corpo da requisição
+    const buffer = req.body;// O buffer de áudio deve vir no corpo da requisição
 
     // Escrever o arquivo de áudio original
     await fs.promises.writeFile(`${filename}.ogg`, buffer);
